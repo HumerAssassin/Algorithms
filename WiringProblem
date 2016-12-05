@@ -1,0 +1,118 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Orienteering
+{
+	private static int[][] grid=new int[100][100]; // 方格阵列
+	private static int pathLen; // 最短线路长度
+	private static int width,height; //长度和高度也传过来
+
+	public int findPath(Position start, Position end) 
+	{
+	// 初始化相对位移
+		Position[] offset = new Position[4];
+		offset[0] = new Position(0, 1);//right
+		offset[1] = new Position(1, 0);//down
+		offset[2] = new Position(0, -1);//left
+		offset[3] = new Position(-1, 0);//up
+
+		Position here = new Position(start.row, start.col);
+		grid[start.row][start.col] = 2; // 起始位置的距离
+		int numOfNbrs = 4;
+
+		// 标记可达位置
+		Queue<Position> q=new LinkedList<Position>();
+		Position nbr = new Position(0, 0);
+
+		do 
+		{
+			// 标记可达相邻方格
+			for (int i = 0; i < numOfNbrs; i++) 
+			{
+				nbr.col = here.col + offset[i].col;
+				nbr.row = here.row + offset[i].row;
+				if (nbr.row < height && nbr.col < width && nbr.col >= 0 && nbr.row >= 0 && grid[nbr.row][nbr.col] == 0) 
+					grid[nbr.row][nbr.col] = grid[here.row][here.col] + 1;
+				if ((nbr.row == end.row) && (nbr.col == end.col))
+				{
+					break;// 完成
+				}
+				else
+				{
+					q.add(new Position(nbr.row,nbr.col));
+					//这里要将新创建的结点放进去，而不能直接q.add(nbr)，因为这样是将q中的
+					//对象引用和nbr指向同一个对象，后续如果改变nbr，将会影响到q中的对象。
+				}
+			}
+		}
+		if ((nbr.row == end.row) && (nbr.col == end.col))
+			break; // 完成
+		if (q.isEmpty())
+			return -1; // 无解
+		else
+		{
+			here = (Position)q.remove(); // 取下一个扩展结点
+		}
+	} while (true);
+	return grid[end.row][end.col]-2;
+}
+
+class Position {
+	private int row, col;
+	public Position(int r, int c) {
+		row = r;
+		col = c;
+	}
+	public Position() {
+		
+	}	
+}
+
+/**
+* @param args
+*/
+public static void main(String[] args) 
+{
+	// TODO Auto-generated method stub
+	Scanner sc = new Scanner(System.in);
+	String st = sc.nextLine();
+	String s[] = st.split(" ");
+	int width = Integer.parseInt(s[0]);
+	int height = Integer.parseInt(s[1]);
+	Orienteering.width = width;
+	Orienteering.height  = height;
+	String r;
+	int row = 0;
+	int all=0;
+	char row1[] = new char[width];
+	Orienteering or = new Orienteering();
+	Orienteering.Position GPosition = new Orienteering().new Position();
+	Orienteering.Position SPosition = new Orienteering().new Position();
+	for (int i = 0; i < height; i++) 
+	{
+		r = sc.nextLine();
+		row1 = r.toCharArray();
+		for (int j = 0; j < width; j++) 
+		{
+			if(row1[j] == '1') 
+				Orienteering.grid[i][j] = 1; //设置grid的值
+			else
+				Orienteering.grid[i][j] = 0;
+			if (row1[j]== 'a')
+			{
+				GPosition.col = j;
+				GPosition.row = i;
+			}
+			if (row1[j] == 'b')
+			{
+				SPosition.col = j;
+				SPosition.row = i;
+			}
+		}
+	}
+	all=or.findPath(SPosition, GPosition);
+	System.out.print(all);
+}
+
