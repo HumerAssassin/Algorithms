@@ -80,3 +80,76 @@ int main(void)
 	printf("\n");
 	return 0;
 }
+//recursive--------------------
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+
+void MergeSort(int a[],int left,int right);
+void Merge(int a[], int left, int i, int right);
+
+void MergeSort(int a[],int left,int right)
+{
+	if(left<right){
+		int i=(left+right)/2;
+		MergeSort(a,left,i);
+		MergeSort(a,i+1,right);
+		Merge(a,left,i,right);
+	}
+}
+
+void Merge(int a[], int left, int m, int right)
+{
+	int l=m-left+1,r=right-m,i;
+	int L[l+1],R[r+1];
+	for(i=0;i<l;i++)
+	{
+		L[i]=a[left+i];
+	}
+	for(i=0;i<r;i++)
+	{
+		R[i]=a[m+i+1];
+	}
+	L[l]=32767;
+	R[r]=32767;
+	l=0;
+	r=0;
+	for(i=0;i<right-left+1;i++)
+	{
+		if(L[l]<R[r])
+		{
+			a[left+i]=L[l];
+			l++;
+		}
+		else
+		{
+			a[left+i]=R[r];
+			r++;
+		}
+	}
+}
+
+int main(void)
+{
+	int a[10];
+	int i;
+	int n=0;
+	srand((unsigned)time(NULL));
+	for(i=0;i<10;i++){
+		a[i]=rand()%100;	
+		n++;
+	}
+	
+	printf("随机生成10个整数:\n");
+	for(int j=0;j<10;j++)
+		printf("%d\t",a[j]);	
+	MergeSort(a,0,n-1);
+	printf("\n经过合并排序:\n");
+	for(i=0;i<10;i++){
+	
+		printf("%d\t",a[i]);
+	}
+	
+	printf("\n");
+	return 0;
+}
