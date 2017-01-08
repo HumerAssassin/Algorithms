@@ -1,11 +1,3 @@
-#include<stdio.h>
-#include<time.h>
-#include<stdlib.h>
-
-int QuickSort(int a[],int p,int r);
-int Partition(int a[],int p,int r);
-void Swap(int *x,int *y);
-
 void Swap(int *x,int *y)
 {
          int temp;
@@ -40,29 +32,4 @@ int Partition(int a[],int p,int r)
 	    a[p]=a[j];
 	    a[j]=x;
 	    return j;
-}
-
-int main(void)
-{
-	    int a[10];
-	    int i;
-	    int n=0;
-	    srand((unsigned)time(NULL));
-	    for(i=0;i<10;i++){
-		    a[i]=rand()%100;	
-		    n++;
-	    }
-	
-	    printf("随机生成10个整数:\n");
-	    for(int j=0;j<10;j++)
-		    printf("%d\t",a[j]);	
-	    QuickSort(a,0,n-1);
-	    printf("\n经过快速排序:\n");
-	    for(i=0;i<10;i++){
-	
-	   	    printf("%d\t",a[i]);
-	    }
-	
-	    printf("\n");
-	    return 0;
 }
