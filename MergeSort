@@ -1,27 +1,23 @@
-#include<stdio.h>
-#include<time.h>
-#include<stdlib.h>
-
-void MergeSort(int a[],int n);
-void MergePass(int x[],int y[],int s,int n);
-void Merge(int c[],int d[],int l,int m,int r);
-
+/*
+ *非递归
+ */
 void MergeSort(int a[],int n)
 {
 	int *b=new int[n];
 	int s=1;
-	while(s<n){
+	while(s<n)
+	{
 		MergePass(a,b,s,n);
 		s+=s;
 		MergePass(b,a,s,n);
 		s+=s;
 	}
 }
-
 void MergePass(int x[],int y[],int s,int n)
 {
 	int i=0;
-	while(i<=n-2*s){
+	while(i<=n-2*s)
+	{
 		Merge(x,y,i,i+s-1,i+2*s-1);
 		i=i+2*s;
 	}
@@ -31,7 +27,6 @@ void MergePass(int x[],int y[],int s,int n)
 		for(int j=i;j<=n-1;j++)
 			y[j]=x[j];
 }
-
 void Merge(int c[],int d[],int l,int m,int r)
 {
 	int i=l,j=m+1,k=l;
@@ -40,54 +35,19 @@ void Merge(int c[],int d[],int l,int m,int r)
 		 d[k++]=c[i++];
 		else
 		 d[k++]=c[j++];
-	}
-	
-	
+	}	
 	if(i>m){
 		for(int q=j;q<=r;q++)
 			d[k++]=c[q];
-	}
-	
+	}	
 	else{
 		for(int q=i;q<=m;q++)
 			d[k++]=c[q];
 	}
-
 }
-
-
-int main(void)
-{
-	int a[10];
-	int i;
-	int n=0;
-	srand((unsigned)time(NULL));
-	for(i=0;i<10;i++){
-		a[i]=rand()%100;	
-		n++;
-	}
-	
-	printf("随机生成10个整数:\n");
-	for(int j=0;j<10;j++)
-		printf("%d\t",a[j]);	
-	MergeSort(a,n);
-	printf("\n经过合并排序:\n");
-	for(i=0;i<10;i++){
-	
-		printf("%d\t",a[i]);
-	}
-	
-	printf("\n");
-	return 0;
-}
-//recursive--------------------
-#include<stdio.h>
-#include<time.h>
-#include<stdlib.h>
-
-void MergeSort(int a[],int left,int right);
-void Merge(int a[], int left, int i, int right);
-
+/*
+ *递归
+ */
 void MergeSort(int a[],int left,int right)
 {
 	if(left<right){
@@ -127,29 +87,4 @@ void Merge(int a[], int left, int m, int right)
 			r++;
 		}
 	}
-}
-
-int main(void)
-{
-	int a[10];
-	int i;
-	int n=0;
-	srand((unsigned)time(NULL));
-	for(i=0;i<10;i++){
-		a[i]=rand()%100;	
-		n++;
-	}
-	
-	printf("随机生成10个整数:\n");
-	for(int j=0;j<10;j++)
-		printf("%d\t",a[j]);	
-	MergeSort(a,0,n-1);
-	printf("\n经过合并排序:\n");
-	for(i=0;i<10;i++){
-	
-		printf("%d\t",a[i]);
-	}
-	
-	printf("\n");
-	return 0;
 }
