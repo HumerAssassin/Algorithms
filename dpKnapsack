@@ -1,0 +1,124 @@
+public class dpKnapSack {       
+    /* 背包重量  */    
+    private int weight;          
+    /* 背包物品价值  */    
+    private int value;     
+    public dpKnapSack(int weight, int value) {    
+        this.value = value;    
+        this.weight = weight;    
+    }    
+    public int getWeight() {    
+        return weight;    
+    }           
+    public int getValue() {    
+        return value;    
+    }            
+    public String toString() {    
+        return "[weight: " + weight + " " + "value: " + value + "]";   
+    }    
+} 
+
+public class dpKnapsackProblem {          
+    /* 指定背包 */    
+    private dpKnapSack[] bags;          
+    /* 总承重  */    
+    private int totalWeight;         
+    /* 给定背包数量  */    
+    private int n;          
+    /* 前 n 个背包，总承重为 totalWeight 的最优值矩阵  */    
+    private int[][] bestValues;         
+    /* 前 n 个背包，总承重为 totalWeight 的最优值 */    
+    private int bestValue;          
+    /* 前 n 个背包，总承重为 totalWeight 的最优解的物品组成 */    
+    private ArrayList<dpKnapSack> bestSolution;           
+    public dpKnapsackProblem(dpKnapSack[] bags, int totalWeight) {    
+        this.bags = bags;    
+        this.totalWeight = totalWeight;    
+        this.n = bags.length;    
+        if (bestValues == null) {    
+            bestValues = new int[n+1][totalWeight+1];    
+        }    
+    }    
+    public void solve() {              
+        System.out.println("给定背包：");    
+        for(dpKnapSack b: bags) {    
+            System.out.println(b);    
+        }    
+        System.out.println("给定总承重: " + totalWeight);           
+        // 求解最优值    
+        for (int j = 0; j <= totalWeight; j++) {    
+            for (int i = 0; i <= n; i++) {              
+                if (i == 0 || j == 0) {    
+                    bestValues[i][j] = 0;    
+                }       
+                else     
+                {      
+                    if (j < bags[i-1].getWeight()) {    
+                        bestValues[i][j] = bestValues[i-1][j];    
+                    }       
+                    else     
+                    {     
+                        int iweight = bags[i-1].getWeight();    
+                        int ivalue = bags[i-1].getValue();    
+                        bestValues[i][j] =     
+                            Math.max(bestValues[i-1][j], ivalue + bestValues[i-1][j-iweight]);          
+                    }   
+                }            
+           }  
+        }             
+        // 求解背包组成    
+        if (bestSolution == null) {    
+            bestSolution = new ArrayList<dpKnapSack>();    
+        }    
+        int tempWeight = totalWeight;    
+        for (int i=n; i >= 1; i--) {    
+           if (bestValues[i][tempWeight] > bestValues[i-1][tempWeight]) {    
+               bestSolution.add(bags[i-1]);  // bags[i-1] 表示第 i 个背包 
+               tempWeight -= bags[i-1].getWeight();    
+           }    
+           if (tempWeight == 0) { break; }    
+        }    
+        bestValue = bestValues[n][totalWeight];    
+    }    
+        
+    public int getBestValue() {     
+        return bestValue;    
+    }   
+    
+    public int[][] getBestValues() {                
+        return bestValues;    
+    }      
+    public ArrayList<dpKnapSack> getBestSolution() {    
+        return bestSolution;    
+    }    
+        
+}   
+public class dpKnapsackTest {    
+    
+    public static void main(String[] args) {    
+            
+        dpKnapSack[] bags = new dpKnapSack[] {    
+                new dpKnapSack(2,13), new dpKnapSack(1,10),    
+                new dpKnapSack(3,24), new dpKnapSack(2,15),    
+                new dpKnapSack(4,28), new dpKnapSack(5,33),    
+                new dpKnapSack(3,20), new dpKnapSack(1, 8)    
+        };    
+          
+        int totalWeight = 10;    
+        dpKnapsackProblem kp = new dpKnapsackProblem(bags, totalWeight);    
+            
+        kp.solve();    
+        System.out.println(" -------- 该背包问题实例的解: --------- ");    
+        System.out.println("最优值：" + kp.getBestValue());     
+        System.out.println("最优解【选取的背包】: ");    
+        System.out.println(kp.getBestSolution());    
+        System.out.println("最优决策矩阵表：");    
+        int[][] bestValues = kp.getBestValues();    
+        for (int i=0; i < bestValues.length; i++) {    
+            for (int j=0; j < bestValues[i].length; j++) {    
+                System.out.printf("%-5d", bestValues[i][j]);    
+            }    
+            System.out.println();    
+        }    
+    }    
+}   
