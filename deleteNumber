@@ -1,0 +1,33 @@
+import java.io.InputStream; 
+import java.util.Scanner; 
+public class Removenumber{ 
+public static int Delete(int a, int k) { 
+StringBuffer sb = new StringBuffer(a+ "" ); //把A转换成字符串 
+int i, j; 
+for (i = 0; i < k; i++) { 
+for (j = 0; j < sb.length() - 1 
+&& sb.charAt(j) <= sb.charAt(j + 1); j++) { 
+} 
+sb.delete(j, j + 1);
+
+        }
+return sb.length() == 0 ? 0 : Integer.parseInt(sb.toString()); 
+} 
+public static void main(String[] args) { 
+boolean flag = true; 
+while(flag){ 
+Scanner input = new Scanner(System.in);//从键盘逐个输入，显示逐个结果； 
+int in1 = input.nextInt(); 
+int in2 = input.nextInt(); 
+if( in1<=0 || in2<=0) 
+{ 
+flag = false; 
+break; 
+} 
+int out = Delete(in1, in2); 
+System.out.println(out);
+
+        }
+
+    }  
+} 
